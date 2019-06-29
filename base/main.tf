@@ -11,6 +11,33 @@
 provider "aws" {
   region  = "${var.region}"
   profile = "${var.aws_profile}"
+  shared_credentials_file = "${var.aws_creds_file_path}"
+  version = "~> 2.17"
+}
+
+# get your authorized identity
+data "aws_caller_identity" "current" {}
+
+locals {
+  caller_arn = "${data.aws_caller_identity.current.arn}"
+  # split the caller_arn into its elements
+  # caller_arn_split = [
+  #     arn:aws:sts::552242929734:assumed-role,
+  #     DevOps,
+  #     jbeninsonDEV
+  # ]
+  caller_arn_split = "${split("/","${local.caller_arn}")}"
+
+  # extract role name from caller_arn_split -> 'DevOps'
+  role_name = "${element("${local.caller_arn_split}", 1)}"
+  account_id = "${data.aws_caller_identity.current.account_id}"
+
+  role_arn = "arn:aws:iam::${local.account_id}:role/${local.role_name}"
+  common_tags = {
+      Service = "${var.app}"
+      Owner   = "${local.role_name}"
+      Terraform = "True"
+  }
 }
 
 /*
