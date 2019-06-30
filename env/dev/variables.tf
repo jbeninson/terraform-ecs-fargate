@@ -11,6 +11,11 @@ variable "region" {
 # Tags for the infrastructure
 variable "tags" {
   type = "map"
+  default =  {
+        Service = "SlackApp"
+        Owner   = "DevOps"
+        Terraform = "True"
+    }
 }
 
 # The application's name
