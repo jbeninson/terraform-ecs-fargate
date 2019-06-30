@@ -15,7 +15,9 @@ variable "deregistration_delay" {
 }
 
 # The path to the health check for the load balancer to know if the container(s) are ready
-variable "health_check" {}
+variable "health_check" {
+  default = "/healthcheck"
+}
 
 # How often to check the liveliness of the container
 variable "health_check_interval" {
@@ -41,7 +43,11 @@ resource "aws_alb" "main" {
 
   # launch lbs in public or private subnets based on "internal" variable
   internal        = "${var.internal}"
-  subnets         = "${split(",", var.internal == true ? module.vpc.private_subnets : module.vpc.public_subnets)}"
+  # ternary operator cannot be used with list so we join to a string within it and then split back to a list 
+  # subnets         = "${list(split(",", var.internal == true ? join(",", module.vpc.private_subnets.id) : join(",", module.vpc.public_subnets)))}"
+  subnets         = ["${split(",", var.internal == true ? join(",", module.vpc.private_subnets) : join(",", module.vpc.public_subnets))}"]
+
+  # subnets         = "${var.internal == true ? module.vpc.private_subnets : module.vpc.public_subnets}"
   security_groups = ["${aws_security_group.nsg_lb.id}"]
   tags            = "${var.tags}"
 
