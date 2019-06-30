@@ -55,3 +55,7 @@ output "docker_registry" {
 output "bucket" {
   value = "${module.tf_remote_state.bucket}"
 }
+
+output "dynamodb-terraform-state-lock"  {
+  value = "${aws_dynamodb_table.dynamodb-terraform-state-lock.name}"
+}

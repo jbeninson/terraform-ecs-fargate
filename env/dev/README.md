@@ -3,7 +3,6 @@
 Creates the dev environment's infrastructure. These templates are designed to be customized.
 The optional components can be removed by simply deleting the `.tf` file.
 
-
 ## Components
 
 | Name | Description | Optional |
@@ -22,17 +21,15 @@ The optional components can be removed by simply deleting the `.tf` file.
 | [logs-logzio.tf][edll] | Ship container logs to logz.io | Yes |
 | [secretsmanager.tf][edsm] | Add a base secret to Secretsmanager | Yes |
 
-
 ## Usage
 
-```
+``` bash
 # Sets up Terraform to run
 $ terraform init
 
 # Executes the Terraform run
 $ terraform apply
 ```
-
 
 ## Inputs
 
@@ -64,12 +61,10 @@ $ terraform apply
 | public_subnets | The public subnets, minimum of 2, that are a part of the VPC(s) | string | - | yes |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
 | replicas | How many containers to run | string | `1` | no |
-| saml_role | The SAML role to use for adding users to the ECR policy | string | - | yes |
 | scale_down_cron | Default scale down at 7 pm every day | string | `cron(0 23 * * ? *)` | no |
 | scale_down_max_capacity | The maximum number of containers to scale down to. | string | `0` | no |
 | scale_down_min_capacity | The mimimum number of containers to scale down to. Set this and `scale_down_max_capacity` to 0 to turn off service on the `scale_down_cron` schedule. | string | `0` | no |
 | scale_up_cron | Default scale up at 7 am weekdays, this is UTC so it doesn't adjust to daylight savings https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html | string | `cron(0 11 ? * MON-FRI *)` | no |
-| secrets_saml_users | The users (email addresses) from the saml role to give access | list | - | yes |
 | tags | Tags for the infrastructure | map | - | yes |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
 
@@ -85,8 +80,6 @@ $ terraform apply
 | scale_out | Command to scale out the number of tasks (container replicas) |
 | scale_up | Command to scale up cpu and memory |
 | status | Command to view the status of the Fargate service |
-
-
 
 [edm]: main.tf
 [ede]: ecs.tf

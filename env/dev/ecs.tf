@@ -49,7 +49,7 @@ resource "aws_ecs_cluster" "app" {
 # note that the source for the turner default backend image is here:
 # https://github.com/turnerlabs/turner-defaultbackend
 variable "default_backend_image" {
-  default = "quay.io/turner/turner-defaultbackend:0.2.0"
+  default = "552242929734.dkr.ecr.us-west-1.amazonaws.com/slackapp:latest"
 }
 
 resource "aws_appautoscaling_target" "app_scale_target" {
@@ -60,6 +60,15 @@ resource "aws_appautoscaling_target" "app_scale_target" {
   min_capacity       = "${var.ecs_autoscale_min_instances}"
 }
 
+
+resource "aws_cloudwatch_log_group" "logs" {
+  name              = "/fargate/service/${var.app}-${var.environment}"
+  retention_in_days = "14"
+  tags              = "${var.tags}"
+}
+
+# TODO: handle slack environment variable
+# 
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.app}-${var.environment}"
   requires_compatibilities = ["FARGATE"]
@@ -95,7 +104,7 @@ resource "aws_ecs_task_definition" "app" {
       },
       {
         "name": "ENABLE_LOGGING",
-        "value": "false"
+        "value": "true"
       },
       {
         "name": "PRODUCT",
@@ -110,7 +119,7 @@ resource "aws_ecs_task_definition" "app" {
       "logDriver": "awslogs",
       "options": {
         "awslogs-group": "/fargate/service/${var.app}-${var.environment}",
-        "awslogs-region": "us-east-1",
+        "awslogs-region": "${var.region}",
         "awslogs-stream-prefix": "ecs"
       }
     }
@@ -130,7 +139,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups = ["${aws_security_group.nsg_task.id}"]
-    subnets         = ["${split(",", var.private_subnets)}"]
+    subnets         = ["${module.vpc.private_subnets}"]
   }
 
   load_balancer {
@@ -139,9 +148,13 @@ resource "aws_ecs_service" "app" {
     container_port   = "${var.container_port}"
   }
 
-  tags                    = "${var.tags}"
-  enable_ecs_managed_tags = true
-  propagate_tags          = "SERVICE"
+  # TODO: fix the tagging situation here
+  # tags                    = "${var.tags}"
+  # InvalidParameterException: The new ARN and resource ID format must be enabled to work with ECS managed tags. 
+  # Opt in to the new format and try again
+  # https://stackoverflow.com/questions/53605033/adding-tags-to-ecs-service-invalidparameterexception
+  # enable_ecs_managed_tags = false
+  # propagate_tags          = "SERVICE"
 
   # workaround for https://github.com/hashicorp/terraform/issues/12634
   depends_on = [
@@ -175,10 +188,4 @@ data "aws_iam_policy_document" "assume_role_policy" {
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   role       = "${aws_iam_role.ecsTaskExecutionRole.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-resource "aws_cloudwatch_log_group" "logs" {
-  name              = "/fargate/service/${var.app}-${var.environment}"
-  retention_in_days = "14"
-  tags              = "${var.tags}"
 }

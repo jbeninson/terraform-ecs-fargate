@@ -1,16 +1,24 @@
 terraform {
   required_version = ">= 0.11.0"
 
+# The backend configuration is loaded by Terraform extremely early, before
+# the core of Terraform can be initialized. This is necessary because the backend
+# dictates the behavior of that core. The core is what handles interpolation
+# processing. Because of this, interpolations cannot be used in backend
+# configuration.
+
+# If you'd like to parameterize backend configuration, we recommend using
+# partial configuration with the "-backend-config" flag to "terraform init".
   backend "s3" {
-    region  = "${var.region}"
-    profile = "${var.aws_profile}"
+    region  = "us-west-1"
+    profile = "dev"
     bucket  = "tf-state-slackapp"
     key     = "dev.terraform.tfstate"
+    dynamodb_table = "terraform-state-lock-dynamo"
   }
 }
 
-# The AWS Profile to use
-variable "aws_profile" {}
+
 
 provider "aws" {
   version = ">= 1.53.0"
