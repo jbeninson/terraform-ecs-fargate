@@ -130,7 +130,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups = ["${aws_security_group.nsg_task.id}"]
-    subnets         = ["${split(",", var.private_subnets)}"]
+    subnets         = "${module.vpc.private_subnets}"
   }
 
   load_balancer {

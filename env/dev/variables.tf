@@ -4,9 +4,8 @@
  */
 
 # The AWS region to use for the dev environment's infrastructure
-# Currently, Fargate is only available in `us-east-1`.
 variable "region" {
-  default = "us-east-1"
+  default = "us-west-1"
 }
 
 # Tags for the infrastructure
@@ -34,14 +33,3 @@ variable "lb_port" {
 variable "lb_protocol" {
   default = "HTTP"
 }
-
-# Network configuration
-
-# The VPC to use for the Fargate cluster
-variable "vpc" {}
-
-# The private subnets, minimum of 2, that are a part of the VPC(s)
-variable "private_subnets" {}
-
-# The public subnets, minimum of 2, that are a part of the VPC(s)
-variable "public_subnets" {}
