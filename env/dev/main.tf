@@ -14,6 +14,7 @@ terraform {
     profile = "dev"
     bucket  = "tf-state-slackapp"
     key     = "dev.terraform.tfstate"
+    dynamodb_table = "terraform-state-lock-dynamo"
   }
 }
 
