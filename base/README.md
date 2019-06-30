@@ -14,7 +14,7 @@ The main entry point for the Terraform run.
 Common variables to use in various Terraform files.
 
 + `state.tf`  
-Generate a [remote state][state] bucket in S3 for use with later Terraform runs.
+Generate a [remote state][state] bucket in S3 and a state locking db table to protect against concurrent changes from multiple team members for use with later Terraform runs.
 
 + `ecr.tf`  
 Creates an AWS [Elastic Container Registry (ECR)][ecr] for the application.
@@ -49,11 +49,13 @@ $ terraform apply
 |------|-------------|
 | bucket | Returns the name of the S3 bucket that will be used in later Terraform files |
 | docker_registry | Returns the name of the ECR registry, this will be used later in various scripts |
-
+| dynamodb-terraform-state-lock| Returns the name of the table to protect the remote state from concurrent users
 
 ## Additional Information
 
 + [Terraform remote state][state]
+
++ [Terraform state locking][state-locking]
 
 + [Terraform providers][provider]
 
@@ -62,5 +64,6 @@ $ terraform apply
 
 
 [state]: https://www.terraform.io/docs/state/remote.html
+[state-locking]: https://www.terraform.io/docs/state/locking.html
 [provider]: https://www.terraform.io/docs/providers/
 [ecr]: https://aws.amazon.com/ecr/
