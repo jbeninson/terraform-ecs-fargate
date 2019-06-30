@@ -17,8 +17,7 @@ terraform {
   }
 }
 
-# The AWS Profile to use
-variable "aws_profile" {}
+
 
 provider "aws" {
   version = ">= 1.53.0"

@@ -60,6 +60,15 @@ resource "aws_appautoscaling_target" "app_scale_target" {
   min_capacity       = "${var.ecs_autoscale_min_instances}"
 }
 
+
+resource "aws_cloudwatch_log_group" "logs" {
+  name              = "/fargate/service/${var.app}-${var.environment}"
+  retention_in_days = "14"
+  tags              = "${var.tags}"
+}
+
+# TODO: handle slack environment variable
+# 
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.app}-${var.environment}"
   requires_compatibilities = ["FARGATE"]
@@ -91,11 +100,11 @@ resource "aws_ecs_task_definition" "app" {
       },
       {
         "name": "HEALTHCHECK",
-        "value": "${var.health_check}}"
+        "value": "${var.health_check}"
       },
       {
         "name": "ENABLE_LOGGING",
-        "value": "false"
+        "value": "true"
       },
       {
         "name": "PRODUCT",
@@ -110,7 +119,7 @@ resource "aws_ecs_task_definition" "app" {
       "logDriver": "awslogs",
       "options": {
         "awslogs-group": "/fargate/service/${var.app}-${var.environment}",
-        "awslogs-region": "us-east-1",
+        "awslogs-region": "${var.region}",
         "awslogs-stream-prefix": "ecs"
       }
     }
@@ -139,8 +148,8 @@ resource "aws_ecs_service" "app" {
     container_port   = "${var.container_port}"
   }
 
+  # TODO: fix the tagging situation here
   # tags                    = "${var.tags}"
-  # TODO: 
   # InvalidParameterException: The new ARN and resource ID format must be enabled to work with ECS managed tags. 
   # Opt in to the new format and try again
   # https://stackoverflow.com/questions/53605033/adding-tags-to-ecs-service-invalidparameterexception
@@ -179,15 +188,4 @@ data "aws_iam_policy_document" "assume_role_policy" {
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   role       = "${aws_iam_role.ecsTaskExecutionRole.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy2" {
-  role       = "${aws_iam_role.ecsTaskExecutionRole.name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodePipelineReadOnlyAccess"
-}
-
-resource "aws_cloudwatch_log_group" "logs" {
-  name              = "/fargate/service/${var.app}-${var.environment}"
-  retention_in_days = "14"
-  tags              = "${var.tags}"
 }

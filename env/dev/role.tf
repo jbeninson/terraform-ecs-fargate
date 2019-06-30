@@ -14,7 +14,6 @@ resource "aws_iam_role_policy" "app_policy" {
   policy = "${data.aws_iam_policy_document.app_policy.json}"
 }
 
-# TODO: fill out custom policy
 data "aws_iam_policy_document" "app_policy" {
   statement {
     actions = [
@@ -26,6 +25,12 @@ data "aws_iam_policy_document" "app_policy" {
     ]
   }
 }
+
+resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy2" {
+  role       = "${aws_iam_role.app_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineReadOnlyAccess"
+}
+
 
 data "aws_caller_identity" "current" {}
 
@@ -50,11 +55,6 @@ locals {
       Terraform = "True"
   }
 }
-
-
-# data "aws_iam_role" "role" {
-#   name = "${local.role_name}"
-# }
 
 # allow role to be assumed by ecs and local saml users (for development)
 data "aws_iam_policy_document" "app_role_assume_role_policy" {
