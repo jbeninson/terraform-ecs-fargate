@@ -33,22 +33,26 @@ output "status" {
   value = "fargate service info"
 }
 
-# Command to deploy a new task definition to the service using Docker Compose
-output "deploy" {
-  value = "fargate service deploy -f docker-compose.yml"
-}
+# # Command to deploy a new task definition to the service using Docker Compose
+# output "deploy" {
+#   value = "fargate service deploy -f docker-compose.yml"
+# }
 
-# Command to scale up cpu and memory
-output "scale_up" {
-  value = "fargate service update -h"
-}
+# # Command to scale up cpu and memory
+# output "scale_up" {
+#   value = "fargate service update -h"
+# }
 
-# Command to scale out the number of tasks (container replicas)
-output "scale_out" {
-  value = "fargate service scale -h"
-}
+# # Command to scale out the number of tasks (container replicas)
+# output "scale_out" {
+#   value = "fargate service scale -h"
+# }
 
 # Command to set the AWS_PROFILE
 output "aws_profile" {
   value = "${var.aws_profile}"
+}
+
+output "vpc" {
+  value = "${module.vpc.vpc_id}"
 }
