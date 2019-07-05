@@ -60,6 +60,16 @@ data "aws_iam_policy_document" "cicd_policy" {
   }
 }
 
+# store an environment variable in AWS systems manager agent
+resource "aws_ssm_parameter" "SLACK_OAUTH_ACCESS_TOKEN" {
+  name        = "SLACK_OAUTH_ACCESS_TOKEN"
+  description = "The parameter description"
+  type        = "SecureString"
+  value       = "${var.SLACK_OAUTH_ACCESS_TOKEN}"
+
+  tags="${var.tags}"
+}
+
 resource "aws_iam_user_policy" "cicd_user_policy" {
   name   = "${var.app}_${var.environment}_cicd"
   user   = "${aws_iam_user.cicd.name}"

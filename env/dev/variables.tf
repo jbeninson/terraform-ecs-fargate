@@ -49,3 +49,6 @@ variable "lb_port" {
 variable "lb_protocol" {
   default = "HTTP"
 }
+
+variable "SLACK_OAUTH_ACCESS_TOKEN" {
+}
