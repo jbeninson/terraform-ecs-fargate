@@ -7,7 +7,7 @@ resource "aws_iam_role" "app_role" {
   assume_role_policy = "${data.aws_iam_policy_document.app_role_assume_role_policy.json}"
 }
 
-# assigns the app policy
+# assigns a policy to the app role
 resource "aws_iam_role_policy" "app_policy" {
   name   = "${var.app}-${var.environment}"
   role   = "${aws_iam_role.app_role.id}"
@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "app_policy" {
   statement {
     actions = [
       "ecs:DescribeClusters",
+      "ssm:GetParameter",
     ]
 
     resources = [
@@ -26,7 +27,7 @@ data "aws_iam_policy_document" "app_policy" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy2" {
+resource "aws_iam_role_policy_attachment" "app_policy2" {
   role       = "${aws_iam_role.app_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineReadOnlyAccess"
 }
