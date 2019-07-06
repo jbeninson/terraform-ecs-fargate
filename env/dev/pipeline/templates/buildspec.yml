@@ -18,3 +18,4 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker-compose push 
+      - aws ecs update-service --cluster slackapp-dev --service slackapp-dev slackapp-dev --force-new-deployment

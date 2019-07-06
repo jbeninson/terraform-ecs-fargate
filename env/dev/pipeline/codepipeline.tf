@@ -47,22 +47,22 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
 
-  stage {
-    name = "Production"
+  # stage {
+  #   name = "Production"
 
-    action {
-      name            = "Deploy"
-      category        = "Deploy"
-      owner           = "AWS"
-      provider        = "ECS"
-      input_artifacts = ["imagedefinitions"]
-      version         = "1"
+  #   action {
+  #     name            = "Deploy"
+  #     category        = "Deploy"
+  #     owner           = "AWS"
+  #     provider        = "ECS"
+  #     input_artifacts = ["imagedefinitions"]
+  #     version         = "1"
 
-      configuration {
-        ClusterName = "${var.cluster_name}"
-        ServiceName = "${var.app_service_name}"
-        FileName    = "imagedefinitions.json"
-      }
-    }
-  }
+  #     configuration {
+  #       ClusterName = "${var.cluster_name}"
+  #       ServiceName = "${var.app_service_name}"
+  #       FileName    = "imagedefinitions.json"
+  #     }
+  #   }
+  # }
 }
