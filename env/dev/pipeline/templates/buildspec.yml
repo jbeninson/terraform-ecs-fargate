@@ -8,11 +8,11 @@ phases:
       - export SLACK_OAUTH_ACCESS_TOKEN=$(aws ssm get-parameter --name "SLACK_OAUTH_ACCESS_TOKEN" --with-decryption --query 'Parameter.{Token:Value}' --output text)
   build:
     commands:
-      - echo Run unit test
-      - docker-compose run web pytest -o log_cli=true
       - echo Build started on `date`
       - echo Building the Docker image...          
       - docker-compose build
+      - echo Run unit test
+      - docker-compose run web pytest -o log_cli=true
   post_build:
     commands:
       - echo Build completed on `date`
