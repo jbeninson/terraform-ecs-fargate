@@ -158,7 +158,7 @@ resource "aws_ecs_service" "app" {
 
   # workaround for https://github.com/hashicorp/terraform/issues/12634
   depends_on = [
-    "aws_alb_listener.http",
+    "aws_alb_listener.https",
   ]
 
   # [after initial apply] don't override changes made to task_definition
