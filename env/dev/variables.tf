@@ -52,3 +52,7 @@ variable "lb_protocol" {
 
 variable "SLACK_OAUTH_ACCESS_TOKEN" {
 }
+
+variable "OAuthToken" {
+  description = "Github OauthToken"
+}

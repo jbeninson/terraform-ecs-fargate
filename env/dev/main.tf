@@ -26,27 +26,29 @@ provider "aws" {
   profile = "${var.aws_profile}"
 }
 
-# output
+# GITHUB_TOKEN
 
-# Command to view the status of the Fargate service
-output "status" {
-  value = "fargate service info"
+module "pipeline" {
+  source                = "./pipeline"
+  cluster_name          = "${aws_ecs_cluster.app.name}"
+  container_name        = "${var.container_name.}"
+  app_repository_name   = "${var.app}"
+  git_repository_owner  = "jbeninson"
+  git_repository_name   = "slackApp"
+  git_repository_branch = "slackful"
+  repository_url        = "552242929734.dkr.ecr.us-west-1.amazonaws.com/slackapp"
+  app_service_name      = "${aws_ecs_service.app.name}"
+  account_id            = "${data.aws_caller_identity.current.account_id}"
+  vpc_id                = "${module.vpc.vpc_id}"
+  region                = "${var.region}"
+  OAuthToken            = "${var.OAuthToken}"
+
+  subnet_ids = [
+    "${module.vpc.private_subnets}"
+  ]
 }
 
-# # Command to deploy a new task definition to the service using Docker Compose
-# output "deploy" {
-#   value = "fargate service deploy -f docker-compose.yml"
-# }
-
-# # Command to scale up cpu and memory
-# output "scale_up" {
-#   value = "fargate service update -h"
-# }
-
-# # Command to scale out the number of tasks (container replicas)
-# output "scale_out" {
-#   value = "fargate service scale -h"
-# }
+# output
 
 # Command to set the AWS_PROFILE
 output "aws_profile" {
