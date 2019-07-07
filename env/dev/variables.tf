@@ -45,14 +45,19 @@ variable "lb_port" {
   default = "80"
 }
 
-# The load balancer protocol
+# The protocol to use for routing traffic to the targets. 
 variable "lb_protocol" {
   default = "HTTP"
 }
 
 variable "SLACK_OAUTH_ACCESS_TOKEN" {
+  description = "Used to connect to Slack"
 }
 
 variable "OAuthToken" {
   description = "Github OauthToken"
+}
+
+variable "SLACK_VERIFICATION_TOKEN"{
+  description = "Used to verify requests originate from Slack"
 }

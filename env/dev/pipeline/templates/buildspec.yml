@@ -6,6 +6,8 @@ phases:
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - export SLACK_OAUTH_ACCESS_TOKEN=$(aws ssm get-parameter --name "SLACK_OAUTH_ACCESS_TOKEN" --with-decryption --query 'Parameter.{Token:Value}' --output text)
+      - export SLACK_VERIFICATION_TOKEN=$(aws ssm get-parameter --name "SLACK_VERIFICATION_TOKEN" --with-decryption --query 'Parameter.{Token:Value}' --output text)
+
   build:
     commands:
       - echo Build started on `date`

@@ -63,9 +63,18 @@ data "aws_iam_policy_document" "cicd_policy" {
 # store an environment variable in AWS systems manager agent
 resource "aws_ssm_parameter" "SLACK_OAUTH_ACCESS_TOKEN" {
   name        = "SLACK_OAUTH_ACCESS_TOKEN"
-  description = "The parameter description"
+  description = "This token is used to connect to the Slack API."
   type        = "SecureString"
   value       = "${var.SLACK_OAUTH_ACCESS_TOKEN}"
+
+  tags="${var.tags}"
+}
+
+resource "aws_ssm_parameter" "SLACK_VERIFICATION_TOKEN" {
+  name        = "SLACK_VERIFICATION_TOKEN"
+  description = "This token is used to verify that a request originated from Slack."
+  type        = "SecureString"
+  value       = "${var.SLACK_VERIFICATION_TOKEN}"
 
   tags="${var.tags}"
 }

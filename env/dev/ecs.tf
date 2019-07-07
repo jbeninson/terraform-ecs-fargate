@@ -45,9 +45,7 @@ resource "aws_ecs_cluster" "app" {
 # Note that you can use the fargate CLI for application concerns
 # like deploying actual application images and environment variables
 # on top of the infrastructure provisioned by this template
-# https://github.com/turnerlabs/fargate
-# note that the source for the turner default backend image is here:
-# https://github.com/turnerlabs/turner-defaultbackend
+
 variable "default_backend_image" {
   default = "552242929734.dkr.ecr.us-west-1.amazonaws.com/slackapp:latest"
 }
