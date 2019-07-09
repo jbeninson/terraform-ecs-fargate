@@ -18,7 +18,8 @@
           "ecr:PutImage",
           "ecs:RunTask",
           "iam:PassRole",
-          "ssm:GetParameter"
+          "ssm:GetParameter",
+          "ecs:UpdateService"
         ]
       },
       {

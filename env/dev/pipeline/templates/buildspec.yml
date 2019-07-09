@@ -14,7 +14,7 @@ phases:
       - echo Building the Docker image...          
       - docker-compose build
       - echo Run unit test
-      - docker-compose run web pytest -o log_cli=true
+      - docker-compose run -e AWS_DEFAULT_REGION -e AWS_CONTAINER_CREDENTIALS_RELATIVE_URI web pytest -o log_cli=true
   post_build:
     commands:
       - echo Build completed on `date`

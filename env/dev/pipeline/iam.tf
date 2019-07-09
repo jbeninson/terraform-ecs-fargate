@@ -35,3 +35,9 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   role   = "${aws_iam_role.codebuild_role.id}"
   policy = "${data.template_file.codebuild_policy.rendered}"
 }
+
+
+resource "aws_iam_role_policy_attachment" "codebuild_policy2" {
+  role       = "${aws_iam_role.codebuild_role.id}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineReadOnlyAccess"
+}
