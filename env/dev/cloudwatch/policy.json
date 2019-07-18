@@ -1,0 +1,28 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "${aws_lambda_function.cw_processing_lambda.arn}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Subscribe",
+        "sns:Receive"
+      ],
+      "Condition": {
+        "StringLike": {
+          "sns:Endpoint": "${var.route53recordsetname}/sns"
+        }
+      }
+    }
+  ]
+}
+
+
+
+

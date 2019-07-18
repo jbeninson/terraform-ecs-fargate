@@ -19,6 +19,19 @@ data "aws_iam_policy_document" "app_policy" {
     actions = [
       "ecs:DescribeClusters",
       "ssm:GetParameter",
+      "sns:TagResource",
+      "sns:ListTagsForResource",
+      "sns:ListSubscriptionsByTopic",
+      "sns:GetTopicAttributes",
+      "sns:ListTopics",
+      "sns:Unsubscribe",
+      "sns:GetSubscriptionAttributes",
+      "sns:ListSubscriptions",
+      "sns:SetEndpointAttributes",
+      "sns:GetEndpointAttributes",
+      "sns:SetSubscriptionAttributes",
+      "sns:Subscribe",
+      "sns:ConfirmSubscription"
     ]
 
     resources = [
