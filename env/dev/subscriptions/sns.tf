@@ -2,11 +2,9 @@
 
 resource "aws_sns_topic" "codepipelines" {
   name = "SlackApp-Codepipeline-Topic2"
-
 #   policy = <<EOF
 # {
-#   "Version": "2008-10-17",
-#   "Id": "__default_policy_ID",
+#   "Version": "2012-10-17",
 #   "Statement": [
 #     {
 #       "Sid": "__default_statement_ID",
@@ -15,50 +13,57 @@ resource "aws_sns_topic" "codepipelines" {
 #         "AWS": "*"
 #       },
 #       "Action": [
-#         "SNS:Publish",
-#         "SNS:RemovePermission",
-#         "SNS:SetTopicAttributes",
-#         "SNS:DeleteTopic",
-#         "SNS:ListSubscriptionsByTopic",
 #         "SNS:GetTopicAttributes",
-#         "SNS:Receive",
+#         "SNS:SetTopicAttributes",
 #         "SNS:AddPermission",
-#         "SNS:Subscribe"
+#         "SNS:RemovePermission",
+#         "SNS:DeleteTopic",
+#         "SNS:Subscribe",
+#         "SNS:ListSubscriptionsByTopic",
+#         "SNS:Publish",
+#         "SNS:Receive"
 #       ],
-#       "Resource": "arn:aws:sns:us-west-1:${var.accountnumber}:SlackApp-Codepipeline-Topic2",
+#       "Resource": "arn:aws:sns:us-west-1:552242929734:SlackApp-Codepipeline-Topic2",
 #       "Condition": {
 #         "StringEquals": {
-#           "AWS:SourceOwner": "${var.accountnumber}"
+#           "AWS:SourceOwner": "552242929734"
 #         }
 #       }
 #     },
 #     {
-#       "Sid": "__console_pub_0",
-#       "Effect": "Allow",
-#       "Principal": {
-#         "AWS": "arn:aws:iam::${var.accountnumber}:root"
-#       },
-#       "Action": "SNS:Publish",
-#       "Resource": "arn:aws:sns:us-west-1:${var.accountnumber}:SlackApp-Codepipeline-Topic2"
-#     },
-#     {
-#       "Sid": "__console_sub_0",
-#       "Effect": "Allow",
+#       "Sid": "__subscriptions_statement_id",
 #       "Principal": {
 #         "AWS": "*"
 #       },
+#       "Effect": "Allow",
 #       "Action": [
-#         "SNS:Subscribe",
-#         "SNS:Receive"
+#         "sns:Subscribe",
+#         "sns:Receive"
 #       ],
-#       "Resource": "arn:aws:sns:us-west-1:${var.accountnumber}:SlackApp-Codepipeline-Topic2",
+#       "Resource": "arn:aws:sns:us-west-1:552242929734:SlackApp-Codepipeline-Topic2",
 #       "Condition": {
 #         "StringLike": {
-#           "SNS:Endpoint": "${var.sns_endpoint}"
+#           "sns:Endpoint": "${var.sns_endpoint}"
 #         }
 #       }
 #     }
 #   ]
 # }
 # EOF
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EOF
 }

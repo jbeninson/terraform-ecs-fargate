@@ -49,7 +49,7 @@ resource "aws_lambda_permission" "cw_processing_lambda" {
 
 # use the data blocks to create the lambda function resource 
 resource "aws_lambda_function" "cw_processing_lambda" {
-  function_name    = "${var.app}-${var.environment}-cw-processing-lambda"
+  function_name    = "${var.app}-cw-processing-lambda"
   role             = "${aws_iam_role.cw_processing_lambda.arn}"
   filename         = "${data.archive_file.cw_processing_lambda.output_path}"
   source_code_hash = "${data.archive_file.cw_processing_lambda.output_base64sha256}"
