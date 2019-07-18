@@ -48,13 +48,22 @@ module "pipeline" {
   ]
 }
 
-# output
 
-# Command to set the AWS_PROFILE
+module "subscriptions" {
+    source                = "./subscriptions"
+    app                   = "SlackApp"
+}
+
+
 output "aws_profile" {
   value = "${var.aws_profile}"
 }
 
 output "vpc" {
   value = "${module.vpc.vpc_id}"
+}
+
+output "pipeline_topic_arn" {
+  value = "${module.subscriptions.output.pipeline_topic_arn}"
+  description = "The arn of the pipeline topic. This should be added to the SlackApp awsclient 'TopicArn' so it can subscribe and receive messages."
 }

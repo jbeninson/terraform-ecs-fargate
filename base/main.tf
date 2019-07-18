@@ -51,11 +51,7 @@ output "docker_registry" {
   value = "${aws_ecr_repository.app.repository_url}"
 }
 
-output "docker_registry" {
-  value = "${data.aws_caller_identity.current}"
-}
-
-# Returns the name of the S3 bucket that will be used in later Terraform files
+# Returns the name of the S3 bucket that will be used as the remote state store
 output "bucket" {
   value = "${module.tf_remote_state.bucket}"
 }

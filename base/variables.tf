@@ -19,11 +19,10 @@ variable "aws_creds_file_path" {
 # The AWS profile to use, this would be the same value used in AWS_PROFILE.
 variable "aws_profile" {
     description = "The profile to use from the aws creds file"
-    default = "dev"
 }
 
 variable "app" {
-  default = "slackapp"
+  default = "SlackApp"
 }
 
 # # A map of the tags to apply to various resources. The required tags are:
