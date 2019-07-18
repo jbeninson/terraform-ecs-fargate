@@ -51,19 +51,3 @@ resource "aws_sns_topic" "codepipelines" {
 # }
 # EOF
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-EOF
-}
