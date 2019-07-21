@@ -1,7 +1,7 @@
 
 
 resource "aws_sns_topic" "codepipelines" {
-  name = "SlackApp-Codepipeline-Topic2"
+  name = "SlackApp-Codepipeline-Topic"
 #   policy = <<EOF
 # {
 #   "Version": "2012-10-17",
