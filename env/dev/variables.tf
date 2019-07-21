@@ -61,3 +61,15 @@ variable "OAuthToken" {
 variable "SLACK_VERIFICATION_TOKEN"{
   description = "Used to verify requests originate from Slack"
 }
+
+variable "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN" {
+  description = "Used to connect to Slack as a bot user"
+}
+
+variable "SLACK_AWS_PROFILE_NAME" {
+  default = "dev"
+}
+
+variable "SLACK_AWS_ACCOUNT_ID" {
+  default = "552242929734"
+}
