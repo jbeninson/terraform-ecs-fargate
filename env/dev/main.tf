@@ -64,6 +64,6 @@ output "vpc" {
 }
 
 output "pipeline_topic_arn" {
-  value = "${module.subscriptions.output.pipeline_topic_arn}"
+  value = "${module.subscriptions.pipeline_topic_arn}"
   description = "The arn of the pipeline topic. This should be added to the SlackApp awsclient 'TopicArn' so it can subscribe and receive messages."
 }

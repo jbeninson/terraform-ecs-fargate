@@ -9,11 +9,22 @@ terraform {
 
 # If you'd like to parameterize backend configuration, we recommend using
 # partial configuration with the "-backend-config" flag to "terraform init".
+# TODO update backend from base output
+
+
+# Outputs:
+
+# bucket = tf-state-tools-slackapp
+# docker_registry = 518070709175.dkr.ecr.us-west-1.amazonaws.com/slackapp
+# dynamodb-terraform-state-lock = terraform-state-lock-dynamo
+
+
+
   backend "s3" {
     region  = "us-west-1"
-    profile = "dev"
-    bucket  = "tf-state-slackapp"
-    key     = "dev.terraform.tfstate"
+    profile = "tools"
+    bucket  = "tf-state-tools-slackapp"
+    key     = "tools.terraform.tfstate"
     dynamodb_table = "terraform-state-lock-dynamo"
   }
 }
@@ -26,8 +37,8 @@ provider "aws" {
   profile = "${var.aws_profile}"
 }
 
-# GITHUB_TOKEN
 
+# TODO update repository_url from base output
 module "pipeline" {
   source                = "./pipeline"
   cluster_name          = "${aws_ecs_cluster.app.name}"
@@ -35,8 +46,8 @@ module "pipeline" {
   app_repository_name   = "${var.app}"
   git_repository_owner  = "jbeninson"
   git_repository_name   = "slackApp"
-  git_repository_branch = "slackful"
-  repository_url        = "552242929734.dkr.ecr.us-west-1.amazonaws.com/slackapp"
+  git_repository_branch = "master"
+  repository_url        = "518070709175.dkr.ecr.us-west-1.amazonaws.com/slackapp"
   app_service_name      = "${aws_ecs_service.app.name}"
   vpc_id                = "${module.vpc.vpc_id}"
   region                = "${var.region}"
@@ -63,6 +74,6 @@ output "vpc" {
 }
 
 output "pipeline_topic_arn" {
-  value = "${module.subscriptions.output.pipeline_topic_arn}"
+  value = "${module.subscriptions.pipeline_topic_arn}"
   description = "The arn of the pipeline topic. This should be added to the SlackApp awsclient 'TopicArn' so it can subscribe and receive messages."
 }
