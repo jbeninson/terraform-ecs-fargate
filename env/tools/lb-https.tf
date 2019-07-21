@@ -6,22 +6,13 @@ variable "https_port" {
   default = "443"
 }
 
-# The ARN for the SSL certificate
-# variable "certificate_arn" {
-#     default = "arn:aws:acm:us-west-1:552242929734:certificate/e4b20db7-7613-494f-923e-d4adcd0f6384"
-# }
-
 variable "route53recordsetname" {
-  default = "slackappdevops.navex-dev.com"
+  default = "slackappdevops.navex-tools.com"
 }
 
 # resource "aws_acm_certificate" "cert" {
 #   domain_name       = "${var.route53recordsetname}"
 #   validation_method = "DNS"
-
-#   tags = {
-#     Environment = "test"
-#   }
 
 #   lifecycle {
 #     create_before_destroy = true
@@ -29,7 +20,8 @@ variable "route53recordsetname" {
 # }
 
 data "aws_acm_certificate" "cert" {
-  domain   = "slackappdevops.navex-dev.com"
+  # domain   = "slackappdevops.navex-dev.com"
+    domain   = "${var.route53recordsetname}"
 }
 
 resource "aws_alb_listener" "https" {
