@@ -22,7 +22,7 @@ variable "aws_profile" {
 }
 
 variable "app" {
-  default = "SlackApp"
+  default = "slackapp"
 }
 
 # # A map of the tags to apply to various resources. The required tags are:
