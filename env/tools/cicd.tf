@@ -70,6 +70,7 @@ resource "aws_ssm_parameter" "SLACK_OAUTH_ACCESS_TOKEN" {
   tags="${var.tags}"
 }
 
+
 resource "aws_ssm_parameter" "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN" {
   name        = "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"
   description = "This token is used to connect to the Slack API."

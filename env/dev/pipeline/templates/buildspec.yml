@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - export SLACK_OAUTH_ACCESS_TOKEN=$(aws ssm get-parameter --name "SLACK_OAUTH_ACCESS_TOKEN" --with-decryption --query 'Parameter.{Token:Value}' --output text)
+      - export SLACK_VERIFICATION_TOKEN=$(aws ssm get-parameter --name "SLACK_VERIFICATION_TOKEN" --with-decryption --query 'Parameter.{Token:Value}' --output text)
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker-compose build
+      - echo Run unit test
+      - docker-compose run -e AWS_DEFAULT_REGION -e AWS_CONTAINER_CREDENTIALS_RELATIVE_URI web pytest -o log_cli=true
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker-compose push 
+      - aws ecs update-service --cluster slackapp-dev --service slackapp-dev --force-new-deployment

@@ -13,7 +13,7 @@ module "tf_remote_state" {
   source = "github.com/turnerlabs/terraform-remote-state?ref=v2.2.0"
 
   role        = "${local.role_name}"
-  application = "${var.app}"
+  application = "${var.aws_profile}-${var.app}"
   tags        = "${local.common_tags}"
 }
 

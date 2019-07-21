@@ -27,7 +27,7 @@ variable "container_name" {
 # used by both autoscale-perf.tf and autoscale.time.tf
 # For production, consider using at least "2".
 variable "ecs_autoscale_min_instances" {
-  default = "1"
+  default = "2"
 }
 
 # The maximum number of containers that should be running.
@@ -46,8 +46,9 @@ resource "aws_ecs_cluster" "app" {
 # like deploying actual application images and environment variables
 # on top of the infrastructure provisioned by this template
 
+# TODO: make a variable
 variable "default_backend_image" {
-  default = "552242929734.dkr.ecr.us-west-1.amazonaws.com/slackapp:latest"
+  default = "518070709175.dkr.ecr.us-west-1.amazonaws.com/slackapp:latest"
 }
 
 resource "aws_appautoscaling_target" "app_scale_target" {

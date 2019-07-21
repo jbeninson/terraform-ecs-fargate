@@ -10,7 +10,7 @@ variable "region" {
 
 # The AWS Profile to use
 variable "aws_profile" {
-  default = "dev"
+  default = "tools"
 }
 
 # Tags for the infrastructure
@@ -30,7 +30,7 @@ variable "app" {
 
 # The environment that is being built
 variable "environment" {
-  default = "dev"
+  default = "tools"
 }
 
 # The port the container will listen on, used for load balancer health check
@@ -54,6 +54,10 @@ variable "SLACK_OAUTH_ACCESS_TOKEN" {
   description = "Used to connect to Slack"
 }
 
+variable "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN" {
+  description = "Used to connect to Slack as a bot user"
+}
+
 variable "OAuthToken" {
   description = "Github OauthToken"
 }
@@ -62,14 +66,11 @@ variable "SLACK_VERIFICATION_TOKEN"{
   description = "Used to verify requests originate from Slack"
 }
 
-variable "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN" {
-  description = "Used to connect to Slack as a bot user"
-}
 
 variable "SLACK_AWS_PROFILE_NAME" {
-  default = "dev"
+  default = "tools"
 }
 
 variable "SLACK_AWS_ACCOUNT_ID" {
-  default = "552242929734"
+  default = "518070709175"
 }
