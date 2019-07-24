@@ -6,8 +6,8 @@ data "template_file" "cw_processing_lambda" {
   #   topic_arn = "${aws_sns_topic.codepipelines.id}"
   # }
   vars = {
+    region_name = "${local.sns_topic_region}"
     topic_arn = "${var.sns_topic_arn}"
-    region_name = "$(local.sns_topic_region)"
   }
 
   template = <<EOF
