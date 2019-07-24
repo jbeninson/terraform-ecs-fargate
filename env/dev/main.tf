@@ -26,6 +26,12 @@ provider "aws" {
   profile = "${var.aws_profile}"
 }
 
+provider "aws" {
+  alias  = "usw2"
+  region = "us-west-2"
+  profile = "${var.aws_profile}"
+}
+
 # GITHUB_TOKEN
 
 module "pipeline" {
@@ -54,6 +60,20 @@ module "subscriptions" {
     app                   = "SlackApp"
 }
 
+module "cloudwatch_lambda" {
+  source = "./cloudwatch-lambda"
+  lambda_function_role_arn = "${module.subscriptions.lambda_function_role_arn}"
+  sns_topic_arn = "${module.subscriptions.pipeline_topic_arn}"
+}
+
+module "cloudwatch_lambda_us-west-2" {
+  source = "./cloudwatch-lambda"
+  lambda_function_role_arn = "${module.subscriptions.lambda_function_role_arn}"
+  sns_topic_arn = "${module.subscriptions.pipeline_topic_arn}"
+  providers = {
+    aws = "aws.usw2"
+  }
+}
 
 output "aws_profile" {
   value = "${var.aws_profile}"
