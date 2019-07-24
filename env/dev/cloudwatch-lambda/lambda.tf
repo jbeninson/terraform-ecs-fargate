@@ -17,20 +17,24 @@ import boto3
 # https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
 def lambda_handler(event, context):
     sns = boto3.client('sns', region_name="$${region_name}")
+
+    TopicArn="$${topic_arn}"
+    Message=json.dumps({"default": json.dumps(event)})
+    MessageAttributes={
+      'resources': {
+          'DataType': 'String.Array',
+          'StringValue': json.dumps(event['resources'])
+      }
+    }
     response = sns.publish(
-        TopicArn="$${topic_arn}",
-        Message=json.dumps({"default": json.dumps(event)}),
+        TopicArn=TopicArn,
+        Message=Message,
         Subject='Forwarded From CW',
         MessageStructure='json',
-        MessageAttributes={
-            'resources': {
-                'DataType': 'String.Array',
-                'StringValue': json.dumps(event['resources'])
-            }
-        }
+        MessageAttributes=MessageAttributes
     )
-    
-    print(response)
+    r = {'TopicArn': TopicArn, 'Message': Message, 'MessageAttributes': MessageAttributes, 'Response': response}
+    print(r)
     return response
 EOF
 }
