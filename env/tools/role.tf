@@ -63,11 +63,6 @@ locals {
   account_id = "${data.aws_caller_identity.current.account_id}"
 
   role_arn = "arn:aws:iam::${local.account_id}:role/${local.role_name}"
-  common_tags = {
-      Service = "${var.app}"
-      Owner   = "${local.role_name}"
-      Terraform = "True"
-  }
 }
 
 # allow role to be assumed by ecs and local saml users (for development)
