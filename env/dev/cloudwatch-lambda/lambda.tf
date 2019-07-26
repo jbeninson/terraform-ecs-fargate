@@ -2,9 +2,6 @@
 # this is necessary because subscription filters require a "message attributes" key which isn't generated from cloudwatch
 data "template_file" "cw_processing_lambda" {
   # a double $$ is needed to access vars within a data template
-  # vars = {
-  #   topic_arn = "${aws_sns_topic.codepipelines.id}"
-  # }
   vars = {
     region_name = "${local.sns_topic_region}"
     topic_arn = "${var.sns_topic_arn}"
@@ -14,7 +11,7 @@ data "template_file" "cw_processing_lambda" {
 import json
 import boto3
 
-# https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
+# https://docs.aws.amazon.com/sns/latest/dg/sns-message-attributes.html
 def lambda_handler(event, context):
     sns = boto3.client('sns', region_name="$${region_name}")
 
@@ -24,8 +21,13 @@ def lambda_handler(event, context):
       'resources': {
           'DataType': 'String.Array',
           'StringValue': json.dumps(event['resources'])
+      },
+      'detail-type': {
+          'DataType': 'String',
+          'StringValue': event['detail-type']
       }
     }
+
     response = sns.publish(
         TopicArn=TopicArn,
         Message=Message,
@@ -33,6 +35,7 @@ def lambda_handler(event, context):
         MessageStructure='json',
         MessageAttributes=MessageAttributes
     )
+    
     r = {'TopicArn': TopicArn, 'Message': Message, 'MessageAttributes': MessageAttributes, 'Response': response}
     print(r)
     return response

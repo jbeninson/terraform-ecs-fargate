@@ -37,6 +37,19 @@ provider "aws" {
   profile = "${var.aws_profile}"
 }
 
+provider "aws" {
+  alias  = "usw2"
+  region = "us-west-2"
+  profile = "${var.aws_profile}"
+}
+
+locals {
+    common_tags = {
+      Service = "${var.app}"
+      Owner   = "${local.role_name}"
+      Terraform = "True"
+  }
+}
 
 # TODO update repository_url from base output
 module "pipeline" {
@@ -62,6 +75,21 @@ module "pipeline" {
 module "subscriptions" {
     source                = "./subscriptions"
     app                   = "SlackApp"
+}
+
+module "cloudwatch_lambda" {
+  source = "./cloudwatch-lambda"
+  lambda_function_role_arn = "${module.subscriptions.lambda_function_role_arn}"
+  sns_topic_arn = "${module.subscriptions.pipeline_topic_arn}"
+}
+
+module "cloudwatch_lambda_us-west-2" {
+  source = "./cloudwatch-lambda"
+  lambda_function_role_arn = "${module.subscriptions.lambda_function_role_arn}"
+  sns_topic_arn = "${module.subscriptions.pipeline_topic_arn}"
+  providers = {
+    aws = "aws.usw2"
+  }
 }
 
 
