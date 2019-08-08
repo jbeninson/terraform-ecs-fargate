@@ -60,7 +60,7 @@ module "pipeline" {
   git_repository_owner  = "jbeninson"
   git_repository_name   = "slackApp"
   git_repository_branch = "master"
-  repository_url        = "518070709175.dkr.ecr.us-west-1.amazonaws.com/slackapp"
+  repository_url        = "${var.ecr_repo}"
   app_service_name      = "${aws_ecs_service.app.name}"
   vpc_id                = "${module.vpc.vpc_id}"
   region                = "${var.region}"

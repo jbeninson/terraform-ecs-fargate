@@ -6,9 +6,13 @@
  *
  * To learn more about remote state:
  * https://www.terraform.io/docs/state/remote.html
+ * 
+ * To learn more about state locking:
+ * https://www.terraform.io/docs/state/locking.html
  */
 
 # s3 bucket for tf remote state
+# https://github.com/turnerlabs/terraform-remote-state
 module "tf_remote_state" {
   source = "github.com/turnerlabs/terraform-remote-state?ref=v2.2.0"
 
@@ -19,6 +23,7 @@ module "tf_remote_state" {
 
 
 # create a dynamodb table for locking the state file
+# https://www.terraform.io/docs/providers/aws/r/dynamodb_table.html
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   name = "terraform-state-lock-dynamo"
   hash_key = "LockID"

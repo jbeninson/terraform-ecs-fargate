@@ -1,7 +1,7 @@
 # create the source code for the lambda which processes the cw events, adds Message Attributes, and forwards to the topic
 # this is necessary because subscription filters require a "message attributes" key which isn't generated from cloudwatch
 data "template_file" "cw_processing_lambda" {
-  # a double $$ is needed to access vars within a data template
+  # a double $$ is needed to access vars within a data template in terraform < 0.12
   vars = {
     region_name = "${local.sns_topic_region}"
     topic_arn = "${var.sns_topic_arn}"
@@ -42,6 +42,8 @@ def lambda_handler(event, context):
 EOF
 }
 
+# Generates an archive from content, a file, or directory of files.
+# https://www.terraform.io/docs/providers/archive/d/archive_file.html
 data "archive_file" "cw_processing_lambda" {
   type                    = "zip"
   source_content          = "${data.template_file.cw_processing_lambda.rendered}"
@@ -50,6 +52,7 @@ data "archive_file" "cw_processing_lambda" {
 }
 
 # allow the lamdba to be triggered by the cloudwatch rule
+# https://www.terraform.io/docs/providers/aws/r/lambda_permission.html
 resource "aws_lambda_permission" "cw_processing_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -58,7 +61,8 @@ resource "aws_lambda_permission" "cw_processing_lambda" {
   source_arn    = "${aws_cloudwatch_event_rule.pipelines.arn}"
 }
 
-# use the data blocks to create the lambda function resource 
+# use the data blocks to create the lambda function resource
+# https://www.terraform.io/docs/providers/aws/r/lambda_function.html
 resource "aws_lambda_function" "cw_processing_lambda" {
   function_name    = "${var.app}-cw-processing-lambda"
   role             = "${var.lambda_function_role_arn}"
@@ -68,72 +72,11 @@ resource "aws_lambda_function" "cw_processing_lambda" {
   runtime          = "python3.7"
 }
 
+# Creates a Lambda function alias. Creates an alias that points to the specified Lambda function version.
+# https://www.terraform.io/docs/providers/aws/r/lambda_alias.html
 resource "aws_lambda_alias" "cw_processing_lambda" {
   name             = "${aws_lambda_function.cw_processing_lambda.function_name}"
   description      = "latest"
   function_name    = "${aws_lambda_function.cw_processing_lambda.function_name}"
   function_version = "$LATEST"
 }
-
-# resource "aws_iam_role" "cw_processing_lambda" {
-#   name = "${aws_cloudwatch_event_rule.pipelines.name}"
-
-#   assume_role_policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Action": "sts:AssumeRole",
-#       "Principal": {
-#         "Service": "lambda.amazonaws.com"
-#       },
-#       "Effect": "Allow",
-#       "Sid": ""
-#     }
-#   ]
-# }
-# EOF
-# }
-
-# resource "aws_iam_role_policy_attachment" "lambda_basic_execution_role" {
-#   role       = "${aws_iam_role.cw_processing_lambda.name}"
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
-
-# # resource "aws_iam_role_policy" "sns_policy" {
-# #   name   = "lambda_logs_and_sns_publish"
-# #   role   = "${aws_iam_role.cw_processing_lambda.name}"
-# #   policy = <<EOF
-# # {
-# #   "Version": "2012-10-17",
-# #   "Statement": [
-# #       {
-# #           "Effect": "Allow",
-# #           "Action": [
-# #             "SNS:Publish"
-# #             ],
-# #           "Resource": "${aws_sns_topic.codepipelines.id}"
-# #       }
-# #   ]
-# # }
-# # EOF
-# # }
-
-# resource "aws_iam_role_policy" "sns_policy" {
-#   name   = "lambda_logs_and_sns_publish"
-#   role   = "${aws_iam_role.cw_processing_lambda.name}"
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#       {
-#           "Effect": "Allow",
-#           "Action": [
-#             "SNS:Publish"
-#             ],
-#           "Resource": "${var.sns_topic_arn}"
-#       }
-#   ]
-# }
-# EOF
-# }
