@@ -1,4 +1,5 @@
-
+# https://www.terraform.io/docs/providers/aws/r/codepipeline.html
+# https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements
 resource "aws_codepipeline" "pipeline" {
   name     = "${var.cluster_name}-pipeline"
   role_arn = "${aws_iam_role.codepipeline_role.arn}"
@@ -15,7 +16,6 @@ resource "aws_codepipeline" "pipeline" {
       name             = "Source"
       category         = "Source"
       owner            = "ThirdParty"
-      # NOTE on aws_codepipeline: - the GITHUB_TOKEN environment variable must be set if the GitHub provider is specified.
       provider         = "GitHub"
       version          = "1"
       output_artifacts = ["source"]

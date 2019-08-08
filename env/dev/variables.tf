@@ -73,3 +73,8 @@ variable "SLACK_AWS_PROFILE_NAME" {
 variable "SLACK_AWS_ACCOUNT_ID" {
   default = "552242929734"
 }
+
+variable "ecr_repo" {
+  description = "The ECR repository that was created in the base module to hold versions of the application"
+  default = "552242929734.dkr.ecr.us-west-1.amazonaws.com/slackapp"
+}

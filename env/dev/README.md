@@ -55,10 +55,7 @@ $ terraform apply
 | internal | Whether the application is available on the public internet, also will determine which subnets will be used (public or private) | string | `true` | no |
 | lb_port | The port the load balancer will listen on | string | `80` | no |
 | lb_protocol | The load balancer protocol | string | `HTTP` | no |
-| logz_token | The auth token to use for sending logs to Logz.io | string | - | yes |
-| logz_url | The endpoint to use for sending logs to Logz.io | string | `https://listener.logz.io:8071` | no |
 | private_subnets | The private subnets, minimum of 2, that are a part of the VPC(s) | string | - | yes |
-| public_subnets | The public subnets, minimum of 2, that are a part of the VPC(s) | string | - | yes |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
 | replicas | How many containers to run | string | `1` | no |
 | scale_down_cron | Default scale down at 7 pm every day | string | `cron(0 23 * * ? *)` | no |
