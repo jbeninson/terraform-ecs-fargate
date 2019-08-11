@@ -106,6 +106,15 @@ resource "aws_ssm_parameter" "SLACK_AWS_ACCOUNT_ID" {
   tags="${var.tags}"
 }
 
+resource "aws_ssm_parameter" "SLACK_SIGNING_SECRET" {
+  name        = "SLACK_SIGNING_SECRET"
+  description = "The signing secret used for verifying messages originate in slack"
+  type        = "String"
+  value       = "${var.SLACK_SIGNING_SECRET}"
+
+  tags="${var.tags}"
+}
+
 resource "aws_iam_user_policy" "cicd_user_policy" {
   name   = "${var.app}_${var.environment}_cicd"
   user   = "${aws_iam_user.cicd.name}"
