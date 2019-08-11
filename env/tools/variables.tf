@@ -75,6 +75,9 @@ variable "SLACK_AWS_ACCOUNT_ID" {
   default = "518070709175"
 }
 
+variable "SLACK_SIGNING_SECRET" {
+}
+
 variable "ecr_repo" {
   description = "The ECR repository that was created in the base module to hold versions of the application"
   default = "518070709175.dkr.ecr.us-west-1.amazonaws.com/slackapp"
