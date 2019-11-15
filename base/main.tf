@@ -6,6 +6,10 @@
  * See state.tf for creation of S3 bucket for remote state
  */
 
+ terraform {
+  required_version = "~> 0.11"
+ }
+
 # Using the AWS Provider
 # https://www.terraform.io/docs/providers/
 provider "aws" {
