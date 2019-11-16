@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.11.0"
+  required_version = "~> 0.11"
 
 # The backend configuration is loaded by Terraform extremely early, before
 # the core of Terraform can be initialized. This is necessary because the backend
@@ -55,7 +55,7 @@ locals {
 module "pipeline" {
   source                = "./pipeline"
   cluster_name          = "${aws_ecs_cluster.app.name}"
-  container_name        = "${var.container_name.}"
+  container_name        = "${var.container_name}"
   app_repository_name   = "${var.app}"
   git_repository_owner  = "jbeninson"
   git_repository_name   = "slackApp"
